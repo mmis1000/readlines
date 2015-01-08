@@ -65,6 +65,8 @@ class readlines extends EventEmitter
     @sourceClose = false
     @exited = false
     
+    @lastByte = -1
+    
     @init_()
     
   init_: ()->
@@ -134,9 +136,16 @@ class readlines extends EventEmitter
               lineUpdate = true
               @addline_()
         else
+          if @lastByte == CHAR_R && !@options.macStyleLineEnd
+            @unfinishedLine.push CHAR_R
           @unfinishedLine.push current
-    
+      @lastByte = current
+      
+      
     if Eof && 0 > @unfinishedLine.length
+      if @lastByte == CHAR_R && !@options.macStyleLineEnd
+        @unfinishedLine.push CHAR_R
+        #push it into buffer since there is no other source
       @addline_()
     
     @buffers = new BufferList
