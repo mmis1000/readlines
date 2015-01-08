@@ -47,7 +47,7 @@ class readlines extends EventEmitter
     if (typeof MergedOptions.macStyleLineEnd != 'boolean')
       throw new Error 'bad macStyleLineEnd'
     if MergedOptions.maxBuffer == null
-      MergedOptions.maxBuffer =  MergedOptions.lines * 128
+      MergedOptions.maxBuffer =  MergedOptions.lines * 256
     
     @options = MergedOptions
 
@@ -121,6 +121,9 @@ class readlines extends EventEmitter
             else
               lineUpdate = true
               @addline_()
+          else
+            @addline_()
+            
         when CHAR_R
           if @options.macStyleLineEnd
             if @options.ignoreEmptyLine
@@ -134,7 +137,7 @@ class readlines extends EventEmitter
           @unfinishedLine.push current
     
     if Eof && 0 > @unfinishedLine.length
-      addline_()
+      @addline_()
     
     @buffers = new BufferList
     

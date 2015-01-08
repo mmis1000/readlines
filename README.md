@@ -14,9 +14,9 @@ This currently only works with streams in non-flow mode.
     lines : number [prefetch lines before readable event was emited, default to 10]
     preloadLinesRatio : number [a multifier for lines option, default to 2]
     ignoreEmptyLine : boolean [ignore 0 byte lines, default to true]
-    macStyleLineEnd : false [use \r instead of \r?\n as line separator, default to false]
-    encode : number [output encode, default to null(buffer)]
-    maxBuffer : number [flush lines immediately if output buffer excceed this, default to lines * 128]
+    macStyleLineEnd : boolean [use \r instead of \r?\n as line separator, default to false]
+    encode : null/number [output encode, default to null(buffer)]
+    maxBuffer : number [flush lines immediately if output buffer excceed this, default to lines * 256]
 
 ###event
     

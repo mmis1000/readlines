@@ -1,7 +1,7 @@
 {
-  "name": "readlines",
-  "version": "1.0.0",
-  "description": "a line reader for better memory usage",
+  "name": "lines-reader",
+  "version": "1.0.5",
+  "description": "A line reader for better memory usage, and non-flowing mode support",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
