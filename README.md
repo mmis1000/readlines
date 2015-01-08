@@ -8,7 +8,10 @@ This currently only works with streams in non-flow mode.
 
 ###options
 
-    fileName : absolute / relative file path [optional] 
+    fileName : 
+        absolute / relative file path [optional] 
+        actully remapped to your call location,
+        so use relative path to current file will work
     input : streams [ignored if fileName was set, required]
     output : streams [optional]
     lines : number [prefetch lines before readable event was emited, default to 10]
@@ -45,5 +48,6 @@ example(non-flowMode)
             line = reader.readline()
             if line
                 console.log line
-                setTimeout read, 100
+            if !reader.exited
+                setTimeout read, 1000
         read()
