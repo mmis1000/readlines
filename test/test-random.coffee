@@ -1,6 +1,6 @@
 readlines = require '../'
 
-reader =  new readlines({fileName : "/dev/urandom", encode : "utf8", lines : 10000})
+reader =  new readlines({fileName : "/dev/urandom", encode : "utf8", lines : 200})
 
 count = 0
 id = null
@@ -9,7 +9,7 @@ load = ()->
     console.log 'init'
     read = ()->
         i = 0
-        while i++ < 10000
+        while i++ < 200
             line = reader.readline()
             if !line
                 break
@@ -17,7 +17,7 @@ load = ()->
         if reader.exited
             clearInterval(id)
         console.log(count)
-    id = setInterval read, 1000
+    id = setInterval read, 200
 
 reader.once 'readable', load
 

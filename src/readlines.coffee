@@ -2,7 +2,9 @@
 fs = require 'fs'
 callsite = require 'callsite'
 path = require 'path'
-BufferList = require 'bl'
+#BufferList = require 'bl'
+
+BufferBuilder = require './bufferbuilder.js'
 
 CHAR_R = 13
 CHAR_N = 10
@@ -55,7 +57,7 @@ class readlines extends EventEmitter
       throw new Error 'bad encode'
     
     #internal use only
-    @buffers = new BufferList
+    @buffers = new BufferBuilder
     @unfinishedLine = []
     @lines = []
     @paused = false
@@ -127,7 +129,9 @@ class readlines extends EventEmitter
     #console.log 'here parse data', @lines.length
     i = 0
     lineUpdate = false
-    while undefined != (current = @buffers.get i++)
+    buffer = @buffers.get()
+    #console.log buffer, @buffers
+    while undefined != (current = buffer[i++])
       switch current
         when CHAR_N
           if !@options.macStyleLineEnd
@@ -163,7 +167,7 @@ class readlines extends EventEmitter
         #push it into buffer since there is no other source
       @addline_()
     
-    @buffers = new BufferList
+    @buffers = new BufferBuilder
     
     
     
