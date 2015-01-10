@@ -1,10 +1,14 @@
 {
   "name": "lines-reader",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "A line reader for better memory usage, and non-flowing mode support",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mmis1000/readlines.git"
   },
   "keywords": [
     "readline"

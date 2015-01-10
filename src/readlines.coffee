@@ -54,6 +54,7 @@ class readlines extends EventEmitter
     if !@setEncoding @options.encode
       throw new Error 'bad encode'
     
+    #internal use only
     @buffers = new BufferList
     @unfinishedLine = []
     @lines = []
@@ -62,10 +63,17 @@ class readlines extends EventEmitter
     @flowMode = false
     @pulling = true
     @dry = true
+    @lastByte = -1
+    
+    #flag if input source ended
     @sourceClose = false
+    
+    #flag if it is no longer to get line from this reader
     @exited = false
     
-    @lastByte = -1
+    #flag for if readline is calling
+    @reading = false
+    
     
     @init_()
     
@@ -94,22 +102,29 @@ class readlines extends EventEmitter
     
   pullData_: ()->
     #console.log('here pull data')
-    while data = @options.input.read()
-      @buffers.append data
-      if @options.output
-        @options.output.write data
-      @dataAvaliable = false
+    while @lines.length < @options.lines * @options.preloadLinesRatio
+      while data = @options.input.read()
+        
+        @buffers.append data
+        if @options.output
+          @options.output.write data
+        @dataAvaliable = false
+        
+        if @buffers.length > @options.maxBuffer
+          @dataAvaliable = true
+          break
       
-      if @buffers.length > @options.maxBuffer
-        @dataAvaliable = true
-        break;
+      @parseData_()
+      if !data
+        break
     
-    @parseData_()
-    while @flowMode && @readline()
-      ;#console.log('here send data')
+    
+    if !@reading
+      while @flowMode && @readline()
+        ;#console.log('here send data')
     
   parseData_: (Eof)->
-    #console.log('here parse data')
+    #console.log 'here parse data', @lines.length
     i = 0
     lineUpdate = false
     while undefined != (current = @buffers.get i++)
@@ -169,8 +184,13 @@ class readlines extends EventEmitter
   
   readline: ()->
     #console.log('here read line')
-
-    if @lines.length < @options.lines * @options.preloadLinesRatio
+    
+    if @reading
+      @emit 'error', new Error 'call readline within line event'
+      
+    @reading = true
+    
+    if @lines.length < @options.lines
       if @dataAvaliable
         @pullData_()
       else
@@ -182,11 +202,15 @@ class readlines extends EventEmitter
         @exited = true
         process.nextTick ()=>
           @emit 'end'
+          
+      @reading = false
       return null 
 
     line = @encodeLine @lines.shift()
     @emit 'line', line
-      
+    
+    @reading = false
+    
     return line
     
   encodeLine: (line)->

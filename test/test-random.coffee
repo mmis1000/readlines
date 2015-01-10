@@ -14,8 +14,8 @@ load = ()->
             if !line
                 break
             count++
-            if reader.exited
-                clearInterval(id)
+        if reader.exited
+            clearInterval(id)
         console.log(count)
     id = setInterval read, 1000
 
