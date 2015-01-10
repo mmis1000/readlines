@@ -97,17 +97,16 @@ class readlines extends EventEmitter
           @emit 'readable'
     
     @options.input.on 'end', ()=>
-
+      @sourceClose = true
+      
       @parseData_ true
-      if @lines.length > 0
+      
+      if @flowMode
+        @readline()
         while @flowMode && @readline()
-         ;#console.log('here send data')
-      else if @flowMode
-        @emit 'end'
-
+          ;
       if @dry
         @emit 'readable'
-      @sourceClose = true
     
   pullData_: ()->
     #console.log('here pull data')
@@ -209,7 +208,7 @@ class readlines extends EventEmitter
 
     if @lines.length == 0
       @dry = true
-      if @sourceClose
+      if @sourceClose and !@exited
         @exited = true
         process.nextTick ()=>
           @emit 'end'

@@ -1,6 +1,6 @@
 {
   "name": "lines-reader",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A line reader for better memory usage, and non-flowing mode support",
   "main": "index.js",
   "scripts": {
