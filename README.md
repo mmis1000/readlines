@@ -3,6 +3,8 @@ This currently only works with streams in non-flow mode.
 
 ###usage
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mmis1000/readlines.svg)](https://greenkeeper.io/)
+
     readlines = require ("lines-reader")
     reader =  new readlines(options)
 
